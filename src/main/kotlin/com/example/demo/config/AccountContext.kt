@@ -5,5 +5,4 @@ import org.springframework.security.core.userdetails.User
 
 
 class AccountContext(username: String?, password: String?, authorities: MutableCollection<out GrantedAuthority>?) :
-    User(username, password, authorities) {
-}
+    User(username, password, authorities)

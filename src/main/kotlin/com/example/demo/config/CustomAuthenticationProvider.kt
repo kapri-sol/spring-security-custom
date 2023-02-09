@@ -9,7 +9,6 @@ import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Component
 
-@Component
 class CustomAuthenticationProvider: AuthenticationProvider {
     @Autowired lateinit var userDetailsService: UserDetailsService
     @Autowired lateinit var passwordEncoder: PasswordEncoder

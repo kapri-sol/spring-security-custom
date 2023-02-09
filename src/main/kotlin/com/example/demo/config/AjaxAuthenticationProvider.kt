@@ -3,7 +3,6 @@ package com.example.demo.config
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.authentication.AuthenticationProvider
 import org.springframework.security.authentication.BadCredentialsException
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -26,10 +25,13 @@ class AjaxAuthenticationProvider: AuthenticationProvider {
             throw BadCredentialsException("BadCredentialsException")
         }
 
-        return AjaxAuthenticationToken(
+        val ajaxAuthenticationToken = AjaxAuthenticationToken(
             accountContext.username,
-            null
+            null,
+            accountContext.authorities
         )
+
+        return ajaxAuthenticationToken
     }
 
     override fun supports(authentication: Class<*>?): Boolean {
