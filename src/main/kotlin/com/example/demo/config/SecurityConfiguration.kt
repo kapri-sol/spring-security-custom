@@ -1,12 +1,12 @@
 package com.example.demo.config
 
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.AuthenticationProvider
 import org.springframework.security.authentication.ProviderManager
-import org.springframework.security.config.annotation.authentication.ProviderManagerBuilder
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
@@ -19,20 +19,22 @@ import org.springframework.security.web.authentication.AbstractAuthenticationPro
 import org.springframework.security.web.authentication.AuthenticationFailureHandler
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher
-import org.springframework.security.web.util.matcher.RequestMatcher
 
 @Configuration
 @EnableWebSecurity
 class SecurityConfiguration {
+    private lateinit var  authenticationConfiguration: AuthenticationConfiguration
 
-    @Bean
-    fun authenticationConfiguration(): AuthenticationConfiguration {
-        return AuthenticationConfiguration()
+
+    @Autowired
+    private fun setAuthenticationConfiguration(authenticationConfiguration: AuthenticationConfiguration) {
+        this.authenticationConfiguration = authenticationConfiguration
     }
 
     @Bean
-    fun authenticationManager(authenticationConfiguration: AuthenticationConfiguration): AuthenticationManager {
+    fun authenticationManager(): AuthenticationManager {
         val authenticationManager = authenticationConfiguration.authenticationManager as ProviderManager
         authenticationManager.providers.add(customAuthenticationProvider())
         return authenticationManager
@@ -41,14 +43,20 @@ class SecurityConfiguration {
     @Bean
     fun authenticationProcessingFilter(): AbstractAuthenticationProcessingFilter {
         val ajaxLoginProcessingFilter = AjaxLoginProcessingFilter(AntPathRequestMatcher("/auth/login"))
-        ajaxLoginProcessingFilter.setAuthenticationManager(authenticationManager(authenticationConfiguration()))
+        val contextRepository = HttpSessionSecurityContextRepository()
+        ajaxLoginProcessingFilter.setSecurityContextRepository(contextRepository)
+        ajaxLoginProcessingFilter.setAuthenticationManager(authenticationManager())
         ajaxLoginProcessingFilter.setAuthenticationSuccessHandler(authenticationSuccessHandler())
         ajaxLoginProcessingFilter.setAuthenticationFailureHandler(authenticationFailureHandler())
         return  ajaxLoginProcessingFilter
     }
+
     @Bean
     fun customAuthenticationProvider(): AuthenticationProvider {
-        return AjaxAuthenticationProvider()
+        return AjaxAuthenticationProvider(
+            userDetailService = customUserDetailService(),
+            passwordEncoder = passwordEncoder()
+        )
     }
 
     @Bean
@@ -76,20 +84,15 @@ class SecurityConfiguration {
         return AjaxAccessDeniedHandler()
     }
 
-//    @Bean
-//    fun userDetailService(): UserDetailsService {
-//        val userBuilder = User.builder()
-//        val password = passwordEncoder().encode("1")
-//        val manager = InMemoryUserDetailsManager()
-//        manager.createUser(userBuilder.username("a").password(password).roles("USER").build())
-//        manager.createUser(userBuilder.username("b").password(password).roles("USER").build())
-//        return manager
-//    }
-
-
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         return http
+//            .sessionManagement()
+//            .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+//            .and()
+//            .logout()
+//            .deleteCookies("/auth/logout")
+//            .and()
             .authorizeHttpRequests()
             .requestMatchers( HttpMethod.POST ,"/accounts/**").permitAll()
             .anyRequest()

@@ -1,15 +1,16 @@
 package com.example.demo.config
 
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.authentication.AuthenticationProvider
 import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.password.PasswordEncoder
 
-class AjaxAuthenticationProvider: AuthenticationProvider {
-    @Autowired private lateinit var userDetailService: UserDetailsService
-    @Autowired private lateinit var passwordEncoder: PasswordEncoder
+class AjaxAuthenticationProvider(
+    private val userDetailService: UserDetailsService,
+    private val passwordEncoder: PasswordEncoder
+): AuthenticationProvider {
+
 
     override fun authenticate(authentication: Authentication?): Authentication {
         if (authentication == null) {
@@ -25,13 +26,11 @@ class AjaxAuthenticationProvider: AuthenticationProvider {
             throw BadCredentialsException("BadCredentialsException")
         }
 
-        val ajaxAuthenticationToken = AjaxAuthenticationToken(
+        return AjaxAuthenticationToken(
             accountContext.username,
             null,
             accountContext.authorities
         )
-
-        return ajaxAuthenticationToken
     }
 
     override fun supports(authentication: Class<*>?): Boolean {

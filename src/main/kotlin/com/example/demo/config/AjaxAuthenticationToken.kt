@@ -19,18 +19,18 @@ class AjaxAuthenticationToken(
         if (authorities != null) {
             super.setAuthenticated(true)
         } else {
-            super.setAuthenticated(false)
+            isAuthenticated = false
         }
     }
 
-    fun unauthenticated(principal: Any?, credentials: Any?): AjaxAuthenticationToken? {
+    fun unauthenticated(principal: Any?, credentials: Any?): AjaxAuthenticationToken {
         return AjaxAuthenticationToken(principal, credentials, null)
     }
 
     fun authenticated(
         principal: Any?, credentials: Any?,
         authorities: Collection<GrantedAuthority?>?
-    ): AjaxAuthenticationToken? {
+    ): AjaxAuthenticationToken {
         return AjaxAuthenticationToken(principal, credentials, authorities)
     }
 

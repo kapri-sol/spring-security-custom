@@ -11,6 +11,7 @@ class AjaxLoginAuthenticationEntryPoint: AuthenticationEntryPoint {
         response: HttpServletResponse?,
         authException: AuthenticationException?
     ) {
+
         response?.sendError(HttpServletResponse.SC_UNAUTHORIZED, "UnAuthorized")
     }
 }
