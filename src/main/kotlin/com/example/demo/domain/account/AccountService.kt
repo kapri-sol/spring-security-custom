@@ -1,6 +1,6 @@
-package com.example.demo.account
+package com.example.demo.domain.account
 
-import com.example.demo.account.dto.CreateAccountDto
+import com.example.demo.domain.account.dto.CreateAccountDto
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service

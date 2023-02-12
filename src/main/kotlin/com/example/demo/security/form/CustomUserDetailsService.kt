@@ -1,6 +1,6 @@
-package com.example.demo.config
+package com.example.demo.security.form
 
-import com.example.demo.account.AccountRepository
+import com.example.demo.domain.account.AccountRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException
 import org.springframework.security.core.userdetails.User

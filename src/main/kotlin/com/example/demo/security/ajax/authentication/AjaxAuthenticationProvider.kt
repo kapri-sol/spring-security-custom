@@ -1,17 +1,15 @@
-package com.example.demo.config
+package com.example.demo.security.ajax.authentication
 
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.authentication.AuthenticationProvider
 import org.springframework.security.authentication.BadCredentialsException
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.password.PasswordEncoder
-import org.springframework.stereotype.Component
 
-class CustomAuthenticationProvider: AuthenticationProvider {
-    @Autowired lateinit var userDetailsService: UserDetailsService
-    @Autowired lateinit var passwordEncoder: PasswordEncoder
+class AjaxAuthenticationProvider(
+    private val userDetailService: UserDetailsService,
+    private val passwordEncoder: PasswordEncoder
+): AuthenticationProvider {
 
     override fun authenticate(authentication: Authentication?): Authentication {
         if (authentication == null) {
@@ -21,20 +19,20 @@ class CustomAuthenticationProvider: AuthenticationProvider {
         val username = authentication.name
         val password = authentication.credentials as String
 
-        val accountContext = userDetailsService.loadUserByUsername(username)
+        val accountContext = userDetailService.loadUserByUsername(username)
 
         if (!passwordEncoder.matches(password, accountContext.password)) {
-            throw BadCredentialsException("BadCredentials")
+            throw BadCredentialsException("BadCredentialsException")
         }
 
-        return UsernamePasswordAuthenticationToken(
-            accountContext.username,
+        return AjaxAuthenticationToken(
+            accountContext,
             null,
             accountContext.authorities
         )
     }
 
     override fun supports(authentication: Class<*>?): Boolean {
-        return UsernamePasswordAuthenticationToken::class.java.isAssignableFrom(authentication)
+        return authentication?.equals(AjaxAuthenticationToken::class.java) ?: throw IllegalStateException()
     }
 }

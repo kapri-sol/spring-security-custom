@@ -1,4 +1,4 @@
-package com.example.demo.config
+package com.example.demo.security.ajax.authentication
 
 import org.springframework.security.authentication.AbstractAuthenticationToken
 import org.springframework.security.core.GrantedAuthority
@@ -11,7 +11,7 @@ class AjaxAuthenticationToken(
     private var credentials: Any?,
     private val authorities: Collection<GrantedAuthority?>?
 ) : AbstractAuthenticationToken(authorities) {
-    constructor(principal: String, credentials: String) : this(principal, credentials, null)
+    constructor(principal: Any, credentials: Any) : this(principal, credentials, null)
 
     private val serialVersionUID = SpringSecurityCoreVersion.SERIAL_VERSION_UID
 

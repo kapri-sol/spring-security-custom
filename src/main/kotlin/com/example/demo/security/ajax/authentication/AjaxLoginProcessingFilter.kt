@@ -1,6 +1,6 @@
-package com.example.demo.config
+package com.example.demo.security.ajax.authentication
 
-import com.example.demo.auth.LoginDto
+import com.example.demo.domain.auth.LoginDto
 import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -19,7 +19,6 @@ class AjaxLoginProcessingFilter(
             principal = loginDto.name,
             credentials = loginDto.password
         )
-
         return authenticationManager.authenticate(ajaxAuthenticationToken)
     }
 }

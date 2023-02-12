@@ -1,4 +1,4 @@
-package com.example.demo.auth
+package com.example.demo.domain.auth
 
 data class LoginDto(
     val name: String,

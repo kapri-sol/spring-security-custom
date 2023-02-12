@@ -1,5 +1,12 @@
-package com.example.demo.config
+package com.example.demo.security.ajax.config
 
+import com.example.demo.security.ajax.authentication.AjaxAuthenticationProvider
+import com.example.demo.security.ajax.authentication.AjaxLoginAuthenticationEntryPoint
+import com.example.demo.security.ajax.authentication.AjaxLoginProcessingFilter
+import com.example.demo.security.ajax.authentication.AjaxUserDetailService
+import com.example.demo.security.ajax.handler.AjaxAccessDeniedHandler
+import com.example.demo.security.ajax.handler.AjaxAuthenticationFailureHandler
+import com.example.demo.security.ajax.handler.AjaxAuthenticationSuccessHandler
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -8,6 +15,7 @@ import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.AuthenticationProvider
 import org.springframework.security.authentication.ProviderManager
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.core.userdetails.UserDetailsService
@@ -23,6 +31,7 @@ import org.springframework.security.web.context.HttpSessionSecurityContextReposi
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher
 
 @Configuration
+@EnableMethodSecurity
 @EnableWebSecurity
 class SecurityConfiguration {
     private lateinit var  authenticationConfiguration: AuthenticationConfiguration
