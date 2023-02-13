@@ -14,7 +14,7 @@ class WithMockCustomerUserSecurityContextFactory :
         val accountContext = AccountContext(
             username = customUser.username,
             password = customUser.password,
-            authorities = arrayListOf(SimpleGrantedAuthority("USER")),
+            authorities = customUser.authorities.map { SimpleGrantedAuthority(it) },
             id = customUser.id
         )
 

@@ -3,8 +3,6 @@ package com.example.demo.domain.account
 import com.example.demo.domain.account.dto.CreateAccountDto
 import com.example.demo.domain.account.dto.CreateAccountResponse
 import com.example.demo.security.ajax.authorization.PathAuthorize
-import org.springframework.data.repository.query.Param
-import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.core.parameters.P
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
